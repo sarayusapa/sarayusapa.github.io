@@ -10,7 +10,7 @@
     body { background-color: #0d0d0d; color: #e5e5e5; font-family: 'Fira Code', monospace; line-height: 1.6; letter-spacing: 0.5px; padding: 2rem; }
 
     a { color: #6cf; text-decoration: underline; }
-    a:hover { color: #9df; }
+    a:hover { color: #6cf; }
 
     .container {
       max-width: 800px; 
@@ -20,7 +20,6 @@
     .header { text-align: left; margin-bottom: 3rem; }
     .logo { font-size: 1.5rem; font-weight: 600; }
 
-    /* --- sections --- */
     .content-wrapper { display: block; }
     .intro { display: block; margin-bottom: 2rem; }
     .profile-img { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; border: 2px solid #ffffff; display: block; margin-bottom: 1rem; }
@@ -36,21 +35,51 @@
     .hover-img { position: relative; text-decoration: underline; }
     .sra-hover::after { content: ''; position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%); width: 100px; height: 100px; background-image: url('assets/sra_logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; pointer-events: none; }
     .geoshred-hover::after { content: ''; position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; background-image: url('assets/geoshred.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; pointer-events: none; }
-    .hover-img:hover::after { opacity: 0.8; transform: translateX(-50%) translateY(-5px); }
+    .hover-img:hover::after { opacity: 0.8; }
     .hover-blue-img { color: #3498db; position: relative; cursor: pointer; text-decoration: none; }
     .hover-blue-img::after { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-2px); width: 200px; height: 200px; background-image: url('assets/sra_core.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; pointer-events: none; }
-    .hover-blue-img:hover::after { opacity: 0.9; transform: translateX(-50%) translateY(-4px); }
+    .hover-blue-img:hover::after { opacity: 0.9; }
+    
+    .sra-hover:not(:hover)::after,
+    .geoshred-hover:not(:hover)::after,
+    .hover-blue-img:not(:hover)::after {
+      opacity: 0 !important;
+    }
 
     .contact { border-left: none; border-top: 1px solid #333; padding-left: 0; padding-top: 1.5rem; margin-top: 2rem; transform: none; width: 100%; }
     .contact h2 { font-size: 1.1rem; text-transform: lowercase; margin-bottom: 1rem; color: #ccc; }
     .contact ul { list-style: none; padding-left: 0; }
     .contact li { margin-bottom: 0.5rem; }
+    
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .contact-separator {
+      color: #666;
+      user-select: none;
+    }
+    
+    @media (max-width: 768px) {
+      .contact-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .contact-separator {
+        display: none;
+      }
+    }
 
     .footer { margin-top: 5rem; color: #555; font-size: 0.9rem; text-align: left; }
 
     @media (max-width: 768px) {
       body { padding: 1.5rem; }
-      .profile-img { width: 100px; height: 100px; }
+      .profile-img { width: 300px; height: 300px; }
     }
   </style>
 </head>
@@ -63,7 +92,7 @@
 
     <section class="content-wrapper">
       <div id="about" class="intro">
-        <img src="assets/pfp.jpg" alt="sarayu" class="profile-img" />
+        <img src="assets/pfp.jpg" alt="sarayu" class="profile-img"/>
         <div class="intro-text">
           <p>hi! i’m <strong>sarayu</strong>, a curious soul exploring the world of <strong>robotics</strong> and <strong>machine learning</strong>. i love learning, building things, breaking things, and geeking out about all of it.</p>
           <p>i’m <strong>19</strong>, a second-year engineering student at <strong>VJTI, mumbai</strong>, and a core member at <a href="https://sravjti.in" target="_blank" rel="noopener noreferrer" class="hover-img sra-hover">SRA VJTI</a>, where i get to work on crazy cool robotics with some of the <span class="hover-blue-img">best people i know</span>.</p>
@@ -84,11 +113,9 @@
   <ul>
     <li>t5 grammarator</li>
     <div style="margin-top: 0.5rem; text-align: left;">
-  <!-- GIF on top -->
   <img src="assets/t5.gif" alt="T5 Grammarator GIF" 
        style="width: 100%; max-width: 500px; height: auto; border-radius: 8px; display: block; margin-bottom: 1rem;" />
 
-  <!-- Body text below -->
   <p>worked on fine-tuning a transformer model (T5) for grammar error correction using LoRA, QLoRA, and full fine-tuning. documented and compared methods in a blog. gained practical experience with transformers, LLMs, NLP, and fine-tuning. 
   <a href="https://github.com/sarayusapa/t5_grammarator" target="_blank">github</a></p>
 </div>
@@ -125,12 +152,15 @@
 
       <div id="contact" class="contact">
         <h2>CONTACT</h2>
-        <ul>
-          <li><a href="mailto:sarayusapa@gmail.com">email</a></li>
-          <li><a href="https://github.com/sarayusapa" target="_blank">github</a></li>
-          <li><a href="https://x.com/sarayu_sapa" target="_blank">x</a></li>
-          <li><a href="https://www.youtube.com/@sarayu.a" target="_blank">youtube</a></li>
-        </ul>
+        <div class="contact-links">
+          <a href="mailto:sarayusapa@gmail.com">email</a>
+          <span class="contact-separator">|</span>
+          <a href="https://github.com/sarayusapa" target="_blank">github</a>
+          <span class="contact-separator">|</span>
+          <a href="https://x.com/sarayu_sapa" target="_blank">x</a>
+          <span class="contact-separator">|</span>
+          <a href="https://www.youtube.com/@sarayu.a" target="_blank">youtube</a>
+        </div>
       </div>
     </section>
 
