@@ -1,0 +1,109 @@
+/* ===== BLOG POST HOVER EFFECTS ===== */
+
+/* Remove blue color, keep underline only */
+.post-content .hover-img {
+  color: inherit; /* Use the same color as surrounding text */
+  position: relative;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.post-content .hover-img:hover {
+  color: inherit; /* No color change on hover */
+  text-decoration: underline;
+}
+
+/* Sabha hover image */
+.sabha-hover::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0%; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(20px); 
+  width: 375px; 
+  height: 300px; 
+  background-image: url('assets/sabha.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  opacity: 0; 
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sabha-hover:hover::after { 
+  opacity: 1.0; 
+}
+
+/* Canteen hover image */
+.canteen-hover::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0%; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(-2px); 
+  width: 250px; 
+  height: 200px; 
+  background-image: url('assets/canteen.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  opacity: 0; 
+  pointer-events: none;
+  z-index: 10;
+}
+
+.canteen-hover:hover::after { 
+  opacity: 1.0; 
+}
+
+.excel-hover::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0%; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(50px); 
+  width: 390px; 
+  height: 360px; 
+  background-image: url('assets/excel.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  opacity: 0; 
+  pointer-events: none;
+  z-index: 10;
+}
+
+.excel-hover:hover::after { 
+  opacity: 1.0; 
+}
+
+/* Filter coffee hover image */
+.coffee-hover::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 100%; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(-5px); 
+  width: 100px; 
+  height: 100px; 
+  background-image: url('assets/coffee.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  opacity: 0; 
+  pointer-events: none;
+  z-index: 10;
+}
+
+.coffee-hover:hover::after { 
+  opacity: 1.0; 
+}
+
+/* Hide images when not hovering */
+.sabha-hover:not(:hover)::after,
+.canteen-hover:not(:hover)::after,
+.excel-hover:not(:hover)::after,
+.coffee-hover:not(:hover)::after {
+  opacity: 0 !important;
+}
