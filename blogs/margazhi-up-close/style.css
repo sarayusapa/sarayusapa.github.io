@@ -9,8 +9,9 @@
 }
 
 .post-content .hover-img:hover {
-  color: inherit; /* No color change on hover */
   text-decoration: underline;
+  color: rgb(255, 106, 0);
+  
 }
 
 /* Sabha hover image */
@@ -33,6 +34,7 @@
 
 .sabha-hover:hover::after { 
   opacity: 1.0; 
+
 }
 
 /* Canteen hover image */
