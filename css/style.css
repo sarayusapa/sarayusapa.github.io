@@ -8,9 +8,9 @@
 body {
   background-color: #fffbf5;
   color: #000000;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "anthropicSerif","anthropicSerif Fallback",Georgia,Times New Roman,Times,serif;
   font-size: 20px;
-  line-height: 1.6;
+  line-height: 1.5;
   letter-spacing: 0.5px;
   padding: 0;
 }
@@ -213,6 +213,7 @@ a:hover {
   position: relative; 
   cursor: pointer; 
   text-decoration: underline; 
+  text-decoration-color: rgb(255, 106, 0);
 }
 
 .hover-blue-img::after { 
