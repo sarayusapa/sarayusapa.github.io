@@ -205,6 +205,22 @@ a:hover {
   pointer-events: none; 
 }
 
+.obsidian-hover::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0%; 
+  left: 50%; 
+  transform: translateX(-50%) translateY(40px); 
+  width: 300px; 
+  height: 300px; 
+  background-image: url('/assets/obsidian.png'); 
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+  opacity: 0; 
+  pointer-events: none; 
+}
+
 .hover-img:hover::after { 
   opacity: 1.0;
 }
@@ -238,6 +254,7 @@ a:hover {
 
 .sra-hover:not(:hover)::after,
 .geoshred-hover:not(:hover)::after,
+.obsidian-hover:not(:hover)::after,
 .hover-blue-img:not(:hover)::after {
   opacity: 0 !important;
 }
