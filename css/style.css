@@ -168,7 +168,7 @@ a:hover {
 }
 
 .hover-img:hover,
-.hover-blue-img:hover {
+.sra-team-hover:hover {
   color: rgb(255, 106, 0);
   text-decoration: underline;
 }
@@ -225,14 +225,14 @@ a:hover {
   opacity: 1.0;
 }
 
-.hover-blue-img { 
+.sra-team-hover { 
   position: relative; 
   cursor: pointer; 
   text-decoration: underline; 
   text-decoration-color: rgb(255, 106, 0);
 }
 
-.hover-blue-img::after { 
+.sra-team-hover::after { 
   content: ''; 
   position: absolute; 
   bottom: 100%; 
@@ -248,14 +248,14 @@ a:hover {
   pointer-events: none; 
 }
 
-.hover-blue-img:hover::after { 
+.sra-team-hover:hover::after { 
   opacity: 1.0; 
 }
 
 .sra-hover:not(:hover)::after,
 .geoshred-hover:not(:hover)::after,
 .obsidian-hover:not(:hover)::after,
-.hover-blue-img:not(:hover)::after {
+.sra-team-hover:not(:hover)::after {
   opacity: 0 !important;
 }
 
