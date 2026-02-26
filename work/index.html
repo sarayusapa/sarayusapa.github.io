@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,59 +9,71 @@
 </head>
 
 <body>
-<nav class="navbar">
-<div class="nav-inner">
-<a href="/index.html" class="nav-logo">sarayu</a>
-<button class="menu-toggle" onclick="toggleMenu()">☰</button>
-<div class="nav-right" id="navMenu">
-<a href="/work/">work</a>
-<a href="/music/">music</a>
-<a href="/blogs/">blogs</a>
-<a href="/other/">other</a>
-</div>
-</div>
-</nav>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/index.html" class="nav-logo">sarayu</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="nav-right" id="navMenu">
+        <a href="/work/">work</a>
+        <a href="/music/">music</a>
+        <a href="/blogs/">blogs</a>
+        <a href="/other/">other</a>
+      </div>
+    </div>
+  </nav>
 
   <main class="container">
-            <h2>WORK</h2>
-        <h4>projects</h4>
-  <ul>
-    <li>t5 grammarator</li>
-    <div style="margin-top: 0.5rem; text-align: left;">
-  <img src="/assets/t5.gif" alt="T5 Grammarator GIF" 
-       style="width: 100%; max-width: 300px; height: auto; display: block; margin-bottom: 1rem;" />
+    <h2>WORK</h2>
+    <h4>projects</h4>
+    <ul>
 
-  <p>fine-tuned a transformer model (T5) for grammar error correction using LoRA, QLoRA, and full fine-tuning. documented and compared the 3 methods. <a href="https://github.com/sarayusapa/t5_grammarator" target="_blank">github</a></p>
-</div>
-  </ul>
+      <div style="margin-top: 0.5rem; text-align: left;">
+        <li>jaxsim</li>
+        <p>rewriting a pytorch-based differentiable physics simulator in JAX. end goal: render differentiable cloth
+          simulations that can be optimized via
+          gradient descent. <a href="https://github.com/SRA-VJTI/jaxsim" target="_blank">github</a></p>
+      </div>
+
+      <div style="margin-top: 0.5rem; text-align: left;">
+        <li>t5 grammarator</li>
+        <img src="/assets/t5.gif" alt="T5 Grammarator GIF"
+          style="width: 100%; max-width: 300px; height: auto; display: block; margin-bottom: 1rem;" />
+
+        <p>fine-tuned a transformer model (T5) for grammar error correction using LoRA, QLoRA, and full fine-tuning.
+          documented and compared the 3 methods. <a href="https://github.com/sarayusapa/t5_grammarator"
+            target="_blank">github</a></p>
+      </div>
+    </ul>
 
     <h4>competitions</h4>
-  <ul>
-    <li>smart india hackathon (SIH)</li>
-    <div style="margin-top: 0.5rem; text-align: left;">
-  <img src="/assets/sih.jpg" alt="Smart India Hackathon"
-       style="width: 100%; max-width: 400px; height: auto; display: block; margin-bottom: 1rem;" />
+    <ul>
+      <li>smart india hackathon (SIH)</li>
+      <div style="margin-top: 0.5rem; text-align: left;">
+        <img src="/assets/sih.jpg" alt="Smart India Hackathon"
+          style="width: 100%; max-width: 400px; height: auto; display: block; margin-bottom: 1rem;" />
 
-  <p>skipped my end semester exams to travel to IIT kharagpur to take part in a national level 5-day hardware hackathon. <a href="https://blog.sravjti.in/2025/12/16/24-karat-magic.html" target="_blank">read blog</a></p>
+        <p>skipped my end semester exams to travel to IIT kharagpur to take part in a national level 5-day hardware
+          hackathon. <a href="https://blog.sravjti.in/2025/12/16/24-karat-magic.html" target="_blank">read blog</a></p>
 
-</div>
-  </ul>
-
-      <div id="contact" class="contact">
-        <h2>CONTACT</h2>
-        <div class="contact-links">
-          <a href="mailto:sarayusapa@gmail.com">email</a>
-          <span class="contact-separator">|</span>
-          <a href="https://github.com/sarayusapa" target="_blank">github</a>
-          <span class="contact-separator">|</span>
-          <a href="https://x.com/sarayu_sapa" target="_blank">x</a>
-          <span class="contact-separator">|</span>
-          <a href="https://www.youtube.com/@sarayu.a" target="_blank">youtube</a>
-        </div>
       </div>
+    </ul>
+
+    <div id="contact" class="contact">
+      <h2>CONTACT</h2>
+      <div class="contact-links">
+        <a href="mailto:sarayusapa@gmail.com">email</a>
+        <span class="contact-separator">|</span>
+        <a href="https://github.com/sarayusapa" target="_blank">github</a>
+        <span class="contact-separator">|</span>
+        <a href="https://x.com/sarayu_sapa" target="_blank">x</a>
+        <span class="contact-separator">|</span>
+        <a href="https://www.youtube.com/@sarayu.a" target="_blank">youtube</a>
+      </div>
+    </div>
     </section>
   </main>
 
   <script src="/js/main.js"></script>
 </body>
+
 </html>
