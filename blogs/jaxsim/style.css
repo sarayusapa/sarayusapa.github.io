@@ -30,3 +30,50 @@
   font-size: 1em !important;
 }
 
+.post-content .table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0 0.5rem;
+}
+
+.post-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0.45em 0.7em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.post-content th {
+  background: rgba(255, 106, 0, 0.08);
+  font-weight: 600;
+}
+
+.post-content th:first-child,
+.post-content td:first-child {
+  text-align: left;
+}
+
+.post-content .table-caption {
+  font-size: 0.85em;
+  color: #666666;
+  margin: 0.3rem 0 1.5rem;
+}
+
+.post-content .chart-wrap {
+  max-width: 620px;
+  margin: 1.5rem 0 0.3rem;
+}
+
+.post-content .chart-wrap svg {
+  width: 100%;
+  height: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+

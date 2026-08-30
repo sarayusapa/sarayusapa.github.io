@@ -190,6 +190,190 @@
                     irrelevant, but the design choice is revealing: <em>JAX would rather be verbose than hide
                         state.</em></p>
 
+                <h2>Benchmarks</h2>
+
+                <p>I ran benchmarks comparing jaxsim against the original PyTorch implementation, on CPU and on an RTX
+                    4090 GPU. Three things were measured:</p>
+                <ul>
+                    <li>The DFlex spring-mass chain, written as pure functions over pytrees, which is JIT-compilable.
+                    </li>
+                    <li>The RigidBody Simulator, which mutates Python object state each step and is not
+                        JIT-compilable.</li>
+                    <li>A full optimization loop, thirty Adam iterations end to end, to see what JIT compilation
+                        actually costs in practice rather than in isolation.</li>
+                </ul>
+
+                <p class="subheading"><strong>DFlex spring-mass chain (forward pass)</strong></p>
+
+                <p>Same chain of spring-connected particles, same semi-implicit Euler integrator, on both sides.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Particles</th>
+                                <th>CPU torch (ms)</th>
+                                <th>CPU jax, jit (ms)</th>
+                                <th>CPU speedup</th>
+                                <th>GPU torch (ms)</th>
+                                <th>GPU jax, jit (ms)</th>
+                                <th>GPU speedup</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10</td>
+                                <td>1.88</td>
+                                <td>0.10</td>
+                                <td>19x</td>
+                                <td>2.12</td>
+                                <td>0.13</td>
+                                <td>17x</td>
+                            </tr>
+                            <tr>
+                                <td>50</td>
+                                <td>2.14</td>
+                                <td>0.04</td>
+                                <td>54x</td>
+                                <td>2.12</td>
+                                <td>0.12</td>
+                                <td>18x</td>
+                            </tr>
+                            <tr>
+                                <td>200</td>
+                                <td>3.18</td>
+                                <td>0.06</td>
+                                <td>53x</td>
+                                <td>2.12</td>
+                                <td>0.13</td>
+                                <td>17x</td>
+                            </tr>
+                            <tr>
+                                <td>1000</td>
+                                <td>8.42</td>
+                                <td>n/a</td>
+                                <td>—</td>
+                                <td>2.16</td>
+                                <td>n/a</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="table-caption">n/a: the unrolled loop was too large to compile in reasonable time at that
+                    size. The gradient pass tells the same story, 13x to 112x depending on hardware and particle
+                    count.</p>
+
+                <p>On CPU, torch's time grows with particle count while jax stays flat, because XLA fuses the whole
+                    chain into one compiled kernel regardless of size, so the speedup compounds with N. On GPU, torch
+                    is flat too, because at this scale both frameworks are bound by kernel-launch latency rather than
+                    actual compute, so the speedup stays roughly constant instead of growing.</p>
+
+                <p class="subheading"><strong>RigidBody Simulator (forward pass)</strong></p>
+
+                <p><em>Translating OOP</em> above describes the fix applied to dflex: rebuild the scene from
+                    parameters every forward pass. This module never got that treatment, it still mutates Python
+                    object attributes each step, so it cannot be jit-compiled on either side.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bodies</th>
+                                <th>CPU torch (ms)</th>
+                                <th>CPU jax (ms)</th>
+                                <th>GPU torch (ms)</th>
+                                <th>GPU jax (ms)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>14.07</td>
+                                <td>139.32</td>
+                                <td>34.3</td>
+                                <td>319.7</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>69.95</td>
+                                <td>692.16</td>
+                                <td>170.2</td>
+                                <td>1615.3</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>282.98</td>
+                                <td>2754.13</td>
+                                <td>803.5</td>
+                                <td>6577.0</td>
+                            </tr>
+                            <tr>
+                                <td>100</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>4001.3</td>
+                                <td>33305.2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="table-caption">torch is about 10x faster on CPU and 8-9x faster on GPU, consistently across
+                    every size tested. Same library, same algorithm on both sides of this table — the only variable
+                    is whether the code is written as pure functions or as mutated state.</p>
+
+                <p class="subheading"><strong>End-to-end optimization loop</strong></p>
+
+                <p>Thirty Adam iterations on the spring-mass chain, each one a full forward simulation, backward
+                    pass, and optimizer step, optimizing initial particle velocities to hit a target height. Both
+                    frameworks converged to the identical loss trajectory, which was the correctness check before
+                    trusting the timing numbers at all.</p>
+
+                <div class="chart-wrap">
+                    <svg viewBox="0 0 640 320" role="img"
+                        aria-label="Total wall-clock time versus iteration count for torch and jax on CPU, crossing at about 690 iterations">
+                        <line x1="50" y1="280" x2="580" y2="280" stroke="#000000" stroke-width="1"></line>
+                        <line x1="50" y1="20" x2="50" y2="280" stroke="#000000" stroke-width="1"></line>
+
+                        <text x="50" y="298" font-size="11" fill="#666666" text-anchor="middle">0</text>
+                        <text x="182" y="298" font-size="11" fill="#666666" text-anchor="middle">250</text>
+                        <text x="315" y="298" font-size="11" fill="#666666" text-anchor="middle">500</text>
+                        <text x="447" y="298" font-size="11" fill="#666666" text-anchor="middle">750</text>
+                        <text x="580" y="298" font-size="11" fill="#666666" text-anchor="middle">1000</text>
+                        <text x="315" y="315" font-size="12" fill="#333333" text-anchor="middle">optimizer
+                            iterations</text>
+
+                        <text x="42" y="284" font-size="11" fill="#666666" text-anchor="end">0</text>
+                        <text x="42" y="219" font-size="11" fill="#666666" text-anchor="end">500</text>
+                        <text x="42" y="154" font-size="11" fill="#666666" text-anchor="end">1000</text>
+                        <text x="42" y="89" font-size="11" fill="#666666" text-anchor="end">1500</text>
+                        <text x="42" y="24" font-size="11" fill="#666666" text-anchor="end">2000</text>
+                        <text x="16" y="150" font-size="12" fill="#333333" text-anchor="middle"
+                            transform="rotate(-90 16 150)">total wall-clock (ms)</text>
+
+                        <line x1="50.5" y1="277" x2="580" y2="27.7" stroke="#000000" stroke-width="2"></line>
+                        <line x1="50.5" y1="125.5" x2="580" y2="96" stroke="rgb(255,106,0)" stroke-width="2"></line>
+
+                        <circle cx="415.8" cy="105.2" r="4" fill="#333333"></circle>
+                        <text x="415.8" y="122" font-size="11" fill="#333333" text-anchor="middle">~690 iters</text>
+
+                        <text x="540" y="40" font-size="12" fill="#000000" text-anchor="end">torch</text>
+                        <text x="540" y="108" font-size="12" fill="rgb(255,106,0)" text-anchor="end">jax (jit)</text>
+                    </svg>
+                </div>
+                <p class="table-caption">CPU. Below about 690 iterations, torch's total wall-clock is lower, because
+                    jax's one-time JIT compile (roughly 1.2 seconds for this problem size) hasn't paid for itself
+                    yet. Above that, jax wins, because its per-iteration cost is about 8.5x lower once warmed up. On
+                    GPU the same crossover moves out to about 770 iterations, since the GPU compile itself takes
+                    longer (roughly 2.2 seconds).</p>
+
+                <p>The one result that surprised me: on GPU, both frameworks were slower than on CPU for almost
+                    every benchmark above, torch's dflex forward pass at large particle counts being the one
+                    exception. These simulations top out at around a thousand particles or a hundred bodies, which
+                    isn't enough parallel work per kernel launch to hide the fixed cost of dispatching to the GPU
+                    and back. A GPU has to do enough work per launch to be worth the trip, and a spring-mass chain
+                    this size doesn't clear that bar.</p>
+
                 <h2>When PyTorch Is Actually Better</h2>
 
                 <p>The abstractions in PyTorch are great when you're learning, or for quick experiments where the
@@ -199,7 +383,8 @@
                 <p>But for a differentiable physics simulator where:</p>
                 <ul>
                     <li>Correctness matters more than iteration speed</li>
-                    <li>You'll eventually JIT-compile everything into one GPU kernel</li>
+                    <li>The parts you can write as pure functions get an order of magnitude faster once you JIT
+                        them</li>
                     <li>Gradient flow debugging is crucial</li>
                     <li>The code runs for hours on a cluster</li>
                 </ul>
@@ -211,9 +396,11 @@
                 <p>You see the actual update equations and calculus' chain rule spelled out in code.
                 <p>When your entire goal is computing df/dx, having 'f' actually BE a function and not an object that
                     mutates makes everything cleaner. </p>
-                <p>If you can't express something as a pure function, you're probably dealing with something that
-                    shouldn't be differentiable in the first place. </p>
-                <p>Hence, naturally for differentiable physics, JAX's functional worldview fits perfectly. </p>
+                <p>You can still differentiate through code that mutates state, the RigidBody Simulator above
+                    proves that, but you pay for it: 8-10x slower than the pure-function version, on both CPU and
+                    GPU. </p>
+                <p>Hence, for differentiable physics, JAX's functional worldview fits best when you can actually
+                    afford to rewrite for it. </p>
             </div>
         </article>
     </main>
